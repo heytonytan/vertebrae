@@ -18,21 +18,21 @@
 /* - Backbone COLLECTION ------------------------------------------------------
  * Collections are a way of organizing your models.
  * Backbone gives us some conveniences, such as propagating events,
- * that makes them a breeze to use. I'll start you off both model and view: */
+ * that makes them a breeze to use. I'll start you off with both model and view: */
 var Comment = Backbone.Model.extend({
   /* This is purposely different from the previous steps.
    * Make sure to do those first (!!!) and then check here for new patterns. */
 
   initialize: function(message, votes) {
     this.set('message', message);
-    if (votes) { this.set('votes', votes); }
+    if (votes) { this.set('votes', votes); } // if votes is zero, no setting (set as default)
   },
   // Default to 0 votes
   defaults: {
     votes: 0
   },
   // Convenience function over `model.get/set`
-  votes: function(votes) {
+  votes: function(votes) { // jquery style
     if (arguments.length) {
       this.set('votes', votes);
       return votes;
@@ -50,7 +50,7 @@ var CommentView = Backbone.View.extend({
       '<div>',
         '<span class="votes">',
           this.model.get('votes'),
-        '<span>',
+        '</span>',
         '<span class="comment">',
           this.model.get('message'),
         '</span>',
@@ -111,7 +111,18 @@ var CommentsView = Backbone.View.extend({
      * Remember, we have the underscore functions: */
     this.$el.find('ul').append(this.collection.map(function(comment) {
       // YOUR CODE HERE
-    }));
+      var html = [
+        '<li>',
+          '<span class="votes">',
+            comment.get('votes'),
+          '</span>',
+          '<span class="comment">',
+            comment.get('message'),
+          '</span>',
+        '</li>'
+      ].join('');
+      return html;
+    }).join(''));
 
     return this.$el;
   }
@@ -134,7 +145,7 @@ var comments = new Comments(commentList);
 var commentsView = new CommentsView({ collection: comments });
 
 // Append it to the page (uncomment this when you are ready):
-// $('body').append(commentsView.render());
+$('body').append(commentsView.render());
     </script>
   </body>
 </html>
